@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 const Sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -36,8 +37,8 @@ User.beforeCreate(async (user, options) => {
 User.byToken = async (token) => {
   try {
     const verify = jwt.verify(token, process.env.SECRET_KEY);
-    const user = await User.findByPk(verify.userId);
-    if (user) {
+    if (verify) {
+      const user = await User.findByPk(verify.userId);
       return user;
     }
     const error = Error("bad credentials");
