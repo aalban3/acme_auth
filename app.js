@@ -1,4 +1,8 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
 const express = require("express");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const app = express();
 app.use(express.json());
 const {
@@ -10,7 +14,8 @@ app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
 
 app.post("/api/auth", async (req, res, next) => {
   try {
-    res.send({ token: await User.authenticate(req.body) });
+    const token = await User.authenticate(req.body);
+    res.send({ token });
   } catch (ex) {
     next(ex);
   }
@@ -18,7 +23,9 @@ app.post("/api/auth", async (req, res, next) => {
 
 app.get("/api/auth", async (req, res, next) => {
   try {
-    res.send(await User.byToken(req.headers.authorization));
+    const user = await User.byToken(req.headers.authorization);
+
+    res.send(user);
   } catch (ex) {
     next(ex);
   }
