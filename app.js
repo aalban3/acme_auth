@@ -41,16 +41,13 @@ app.get("/api/auth", requireToken, async (req, res, next) => {
   }
 });
 
-app.get("/api/users/:id/notes", requireToken, async (req, res, next) => {
+app.get("/api/users/:userId/notes", requireToken, async (req, res, next) => {
   try {
-    const { id } = req.params;
-    // const user = await User.byToken(req.headers.authorization);
-    // const authId = user.id;
-    const authId = req.user.id;
-    if (authId !== +id) return res.sendStatus(404);
+    const { userId } = req.params;
+
     const data = await Note.findAll({
       where: {
-        userId: id,
+        userId,
       },
     });
     res.send(data);
